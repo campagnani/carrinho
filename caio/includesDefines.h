@@ -6,3 +6,9 @@
 
 #define CLK_D              3
 #define CLK_E              2
+
+#define REF_V              255
+#define k                  10000
+#define kp                 0
+#define kd                 0
+#define ki                 0

@@ -73,3 +73,41 @@ float mede_velocidade_E(int time)
   pulse_counter  = 0;
   return distancia;
 }
+
+
+
+void controladores_Motores (int velocidadeDesejada_E, int velocidadeDesejada_D)
+{
+    int erro_E = velocidadeDesejada_E - mede_velocidade_E();
+    int erro_D = velocidadeDesejada_D - mede_velocidade_D();
+    int sc_E = erro_E*k;
+    int sc_D = erro_D*k;
+    ponteH_E(sc_E);
+    ponteH_D(sc_D);
+}
+
+
+
+double dErro_dt (double erroAtual)
+{
+  static double erroAnterior      = 0;
+  static double tempoAnterior     = 0;
+         double tempoAtual        = millis();
+          
+  double dErro = 1000 * (erroAtual - erroAnterior) / (tempoAtual-tempoAnterior);
+
+  tempoAnterior  = tempoAtual;
+  erroAnterior   = erroAtual;
+  
+  return dErro;
+}
+
+double controlador_Linha_PID(double referencia)
+{
+    double erro  = referencia - medeSensorLinha();
+    double dErro = dErro_dt(erro);
+    
+    double sinalDeControle = kp * erro + kd * dErro;
+    
+    return sinalDeControle;
+}
